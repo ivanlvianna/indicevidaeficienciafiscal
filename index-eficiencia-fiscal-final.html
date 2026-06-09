@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Índice VIDA de Eficiência Fiscal™ — Ivan Vianna CFP®</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --v:#1A3C2E; --vm:#2E5C46; --vl:#e8f5ee;
+  --d:#d7ae4d; --dc:#f8e38c;
+  --bg:#faf8f4; --branco:#fff;
+  --txt:#1a1714; --txt2:#3a3530; --txt3:#6a6460;
+  --linha:rgba(26,23,20,0.10);
+  --err:#991b1b;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--txt);font-size:16px;line-height:1.55;}
+
+.hd{background:var(--v);padding:52px 32px 44px;text-align:center;position:relative;overflow:hidden;}
+.hd::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(248,227,140,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(248,227,140,0.04) 1px,transparent 1px);background-size:40px 40px;}
+.hd-kicker{font-size:.65rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--d);margin-bottom:16px;position:relative;}
+.hd-titulo{font-family:'Playfair Display',serif;font-size:clamp(1.9rem,5vw,2.8rem);font-weight:700;color:#fff;line-height:1.15;margin-bottom:14px;position:relative;}
+.hd-titulo em{color:var(--dc);font-style:italic;}
+.hd-sub{font-size:1.05rem;font-weight:300;color:rgba(255,255,255,.65);max-width:520px;margin:0 auto;line-height:1.7;position:relative;}
+.hd-badges{display:flex;gap:14px;justify-content:center;margin-top:20px;flex-wrap:wrap;position:relative;}
+.badge{font-size:.75rem;font-weight:700;letter-spacing:.05em;color:rgba(255,255,255,.5);}
+.indice-preview{background:rgba(215,174,77,0.12);border:1px solid rgba(215,174,77,0.25);border-radius:8px;padding:20px 28px;margin:24px auto 0;max-width:380px;text-align:center;position:relative;}
+.indice-preview-label{font-size:.62rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--d);margin-bottom:8px;}
+.indice-preview-num{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:700;color:#fff;line-height:1;}
+.indice-preview-sub{font-size:.82rem;color:rgba(255,255,255,.4);margin-top:5px;}
+
+.prog-wrap{background:var(--v);padding:0 32px 20px;position:sticky;top:0;z-index:20;}
+.prog-inner{max-width:620px;margin:0 auto;}
+.prog-track{height:4px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--d),var(--dc));border-radius:99px;transition:width .4s ease;width:0%;}
+.prog-txt{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);text-align:right;margin-top:6px;}
+
+.main{max-width:640px;margin:0 auto;padding:52px 24px 80px;}
+.tela{display:none;}
+.tela.ativa{display:block;}
+
+/* GATE */
+.gate{background:var(--branco);border:1px solid var(--linha);border-radius:8px;padding:40px 44px;box-shadow:0 2px 20px rgba(0,0,0,.06);}
+.gate-titulo{font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:700;color:var(--v);margin-bottom:8px;line-height:1.3;}
+.gate-sub{font-size:.95rem;font-weight:300;color:var(--txt2);margin-bottom:28px;line-height:1.65;}
+.campo{margin-bottom:20px;}
+.campo label{display:block;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3);margin-bottom:7px;}
+.campo input{width:100%;padding:14px 16px;border:1.5px solid var(--linha);border-radius:4px;font-size:1rem;font-family:'Lato',sans-serif;color:var(--txt);background:var(--branco);outline:none;transition:border-color .15s;}
+.campo input:focus{border-color:var(--v);}
+.campo input.erro{border-color:var(--err);}
+.campo .msg-erro{font-size:.8rem;color:var(--err);margin-top:5px;display:none;}
+.btn-principal{width:100%;padding:17px;background:var(--v);color:var(--d);font-size:1rem;font-weight:700;font-family:'Lato',sans-serif;border:none;border-radius:4px;cursor:pointer;transition:background .15s;margin-top:8px;letter-spacing:.03em;}
+.btn-principal:hover{background:var(--vm);}
+.privacidade{font-size:.78rem;color:var(--txt3);text-align:center;margin-top:14px;line-height:1.55;}
+
+/* PERGUNTA */
+.pergunta-wrap{animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.pergunta-num{font-size:.65rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--d);margin-bottom:12px;}
+.pergunta-txt{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:600;color:var(--txt);line-height:1.4;margin-bottom:28px;}
+.opcoes{display:flex;flex-direction:column;gap:12px;}
+.opcao{background:var(--branco);border:1.5px solid var(--linha);border-radius:6px;padding:18px 22px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:16px;}
+.opcao:hover{border-color:var(--v);background:var(--vl);}
+.opcao.selecionada{border-color:var(--v);background:var(--vl);}
+.opcao-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--linha);flex-shrink:0;transition:all .15s;position:relative;}
+.opcao.selecionada .opcao-radio{border-color:var(--v);background:var(--v);}
+.opcao.selecionada .opcao-radio::after{content:'';position:absolute;inset:4px;border-radius:50%;background:#fff;}
+.opcao-txt{font-size:1rem;font-weight:400;color:var(--txt);line-height:1.4;}
+
+/* RESULTADO */
+.res-indice{text-align:center;background:var(--v);border-radius:8px;padding:48px 36px;margin-bottom:20px;}
+.res-label{font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--d);margin-bottom:14px;}
+.res-numero{font-family:'Playfair Display',serif;font-size:5.5rem;font-weight:700;color:#fff;line-height:1;}
+.res-de100{font-family:'Playfair Display',serif;font-size:2rem;font-weight:400;color:rgba(215,174,77,.6);}
+.res-frase{font-size:1rem;font-weight:300;color:rgba(255,255,255,.65);margin-top:16px;line-height:1.7;max-width:400px;margin-left:auto;margin-right:auto;}
+.res-perda{background:rgba(200,60,30,0.2);border:1px solid rgba(200,60,30,0.35);border-radius:6px;padding:16px 20px;margin-top:20px;font-size:1rem;color:#fff;line-height:1.6;}
+.res-perda strong{color:var(--dc);}
+
+.dims-wrap{background:var(--branco);border:1px solid var(--linha);border-radius:8px;padding:28px 32px;margin-bottom:20px;}
+.dims-titulo{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;color:var(--txt);margin-bottom:20px;}
+.dim-item{margin-bottom:18px;}
+.dim-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.dim-nome{font-size:.92rem;font-weight:700;color:var(--txt);}
+.dim-val{font-size:.88rem;font-weight:700;color:var(--txt3);}
+.dim-track{height:10px;background:rgba(26,60,46,.08);border-radius:99px;overflow:hidden;}
+.dim-fill{height:100%;border-radius:99px;transition:width 1s ease;}
+.dim-fill.alto{background:#dc2626;}
+.dim-fill.medio{background:#d97706;}
+.dim-fill.ok{background:var(--v);}
+
+.cta-box{background:var(--v);border-radius:8px;padding:36px;text-align:center;}
+.cta-kicker{font-size:.62rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--d);margin-bottom:14px;}
+.cta-titulo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.3;}
+.cta-frase{font-size:1.1rem;font-weight:700;color:var(--dc);margin-bottom:10px;}
+.cta-desc{font-size:.95rem;font-weight:300;color:rgba(255,255,255,.65);margin-bottom:24px;line-height:1.65;}
+.cta-itens{text-align:left;margin-bottom:24px;display:flex;flex-direction:column;gap:10px;}
+.cta-item{font-size:.95rem;color:rgba(255,255,255,.85);display:flex;align-items:flex-start;gap:10px;line-height:1.45;}
+.cta-item::before{content:'✓';color:var(--d);font-weight:700;flex-shrink:0;}
+.cta-preco{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--d);margin-bottom:18px;}
+.btn-cta{display:block;background:var(--d);color:var(--v);font-size:1rem;font-weight:700;font-family:'Lato',sans-serif;padding:18px 32px;border-radius:4px;text-decoration:none;transition:background .15s;text-align:center;}
+.btn-cta:hover{background:var(--dc);}
+
+.rodape{background:var(--v);padding:22px 32px;text-align:center;}
+.rodape-txt{font-size:.82rem;color:rgba(255,255,255,.45);line-height:1.65;}
+.rodape-txt strong{color:rgba(255,255,255,.75);font-weight:700;}
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <div class="hd-kicker">Método VIDA · Planejamento Fiscal · Diagnóstico gratuito</div>
+  <h1 class="hd-titulo">Você ganha bem.<br><em>Mas sobra menos do que deveria.</em></h1>
+  <p class="hd-sub">Descubra com qual eficiência fiscal seu patrimônio está operando — e quanto do que você constrói está escapando de forma invisível.</p>
+  <div class="hd-badges">
+    <span class="badge">⏱ 3 minutos</span>
+    <span class="badge">·</span>
+    <span class="badge">5 perguntas</span>
+    <span class="badge">·</span>
+    <span class="badge">Resultado gratuito</span>
+  </div>
+  <div class="indice-preview">
+    <div class="indice-preview-label">Índice VIDA de Eficiência Fiscal™</div>
+    <div class="indice-preview-num">??<span style="font-size:1.4rem;color:var(--d);">/100</span></div>
+    <div class="indice-preview-sub">Seu número estará aqui em 3 minutos</div>
+  </div>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-inner">
+    <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+    <div class="prog-txt" id="progTxt">Preencha seus dados para começar</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- GATE -->
+  <div class="tela ativa" id="tela0">
+    <div class="gate">
+      <div class="gate-titulo">Antes de começar</div>
+      <div class="gate-sub">Preencha os dados abaixo. Seu Índice VIDA de Eficiência Fiscal™ será calculado ao final e enviado para você.</div>
+      <div class="campo">
+        <label for="cNome">Nome completo</label>
+        <input type="text" id="cNome" placeholder="Seu nome">
+        <div class="msg-erro" id="erroNome">Nome deve ter pelo menos 2 caracteres</div>
+      </div>
+      <div class="campo">
+        <label for="cEmail">E-mail</label>
+        <input type="email" id="cEmail" placeholder="seu@email.com">
+        <div class="msg-erro" id="erroEmail">Digite um e-mail válido</div>
+      </div>
+      <div class="campo">
+        <label for="cWpp">WhatsApp <span style="font-weight:300;text-transform:none;letter-spacing:0;">(obrigatório)</span></label>
+        <input type="tel" id="cWpp" placeholder="(11) 99999-9999" maxlength="15">
+        <div class="msg-erro" id="erroWpp">Digite um WhatsApp válido com DDD</div>
+      </div>
+      <button class="btn-principal" onclick="iniciar()">Calcular meu índice →</button>
+      <div class="privacidade">Seus dados são usados exclusivamente para envio do resultado. Não compartilhamos com terceiros.</div>
+    </div>
+  </div>
+
+  <!-- P1 -->
+  <div class="tela" id="tela1">
+    <div class="pergunta-wrap">
+      <div class="pergunta-num">1 de 5</div>
+      <div class="pergunta-txt">Nos últimos 12 meses, você teve a sensação de que está pagando mais imposto do que deveria — mas não sabe exatamente quanto a mais?</div>
+      <div class="opcoes">
+        <div class="opcao" onclick="responder(1,0)"><div class="opcao-radio"></div><div class="opcao-txt">Sim — tenho essa sensação mas nunca parei para calcular</div></div>
+        <div class="opcao" onclick="responder(1,1)"><div class="opcao-radio"></div><div class="opcao-txt">Às vezes — depende do mês, não tenho clareza</div></div>
+        <div class="opcao" onclick="responder(1,2)"><div class="opcao-radio"></div><div class="opcao-txt">Raramente — acredito que minha estrutura está razoável</div></div>
+        <div class="opcao" onclick="responder(1,3)"><div class="opcao-radio"></div><div class="opcao-txt">Não — tenho controle claro do que pago e por quê</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P2 -->
+  <div class="tela" id="tela2">
+    <div class="pergunta-wrap">
+      <div class="pergunta-num">2 de 5</div>
+      <div class="pergunta-txt">Quando foi a última vez que alguém olhou para toda a sua estrutura — PF e empresa juntos — e disse: "está otimizado"?</div>
+      <div class="opcoes">
+        <div class="opcao" onclick="responder(2,0)"><div class="opcao-radio"></div><div class="opcao-txt">Nunca aconteceu</div></div>
+        <div class="opcao" onclick="responder(2,1)"><div class="opcao-radio"></div><div class="opcao-txt">Há mais de 3 anos</div></div>
+        <div class="opcao" onclick="responder(2,2)"><div class="opcao-radio"></div><div class="opcao-txt">Nos últimos 2 a 3 anos</div></div>
+        <div class="opcao" onclick="responder(2,3)"><div class="opcao-radio"></div><div class="opcao-txt">Nos últimos 12 meses</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P3 -->
+  <div class="tela" id="tela3">
+    <div class="pergunta-wrap">
+      <div class="pergunta-num">3 de 5</div>
+      <div class="pergunta-txt">Você tem CNPJ, holding ou alguma estrutura jurídica. Essa estrutura foi criada para te proteger — ou você não tem certeza se ela ainda faz sentido?</div>
+      <div class="opcoes">
+        <div class="opcao" onclick="responder(3,0)"><div class="opcao-radio"></div><div class="opcao-txt">Não tenho nenhuma estrutura — recebo tudo como pessoa física</div></div>
+        <div class="opcao" onclick="responder(3,1)"><div class="opcao-radio"></div><div class="opcao-txt">Tenho, mas nunca soube se ela está gerando economia ou custo</div></div>
+        <div class="opcao" onclick="responder(3,2)"><div class="opcao-radio"></div><div class="opcao-txt">Acredito que faz sentido, mas não avaliei formalmente nos últimos 2 anos</div></div>
+        <div class="opcao" onclick="responder(3,3)"><div class="opcao-radio"></div><div class="opcao-txt">Sim — estrutura revisada e claramente vantajosa para minha situação</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P4 -->
+  <div class="tela" id="tela4">
+    <div class="pergunta-wrap">
+      <div class="pergunta-num">4 de 5</div>
+      <div class="pergunta-txt">Quando você tomou uma decisão financeira relevante recentemente — um investimento grande, uma mudança de emprego, a compra de um imóvel — alguém calculou o impacto disso no seu bolso antes?</div>
+      <div class="opcoes">
+        <div class="opcao" onclick="responder(4,0)"><div class="opcao-radio"></div><div class="opcao-txt">Não — decidi e descobri os custos depois</div></div>
+        <div class="opcao" onclick="responder(4,1)"><div class="opcao-radio"></div><div class="opcao-txt">Considerei superficialmente, sem número preciso</div></div>
+        <div class="opcao" onclick="responder(4,2)"><div class="opcao-radio"></div><div class="opcao-txt">Na maioria das vezes considero, mas sem cálculo técnico</div></div>
+        <div class="opcao" onclick="responder(4,3)"><div class="opcao-radio"></div><div class="opcao-txt">Sempre — é parte obrigatória de qualquer decisão relevante</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P5 -->
+  <div class="tela" id="tela5">
+    <div class="pergunta-wrap">
+      <div class="pergunta-num">5 de 5</div>
+      <div class="pergunta-txt">Você tem alguém — um planejador, contador ou assessor — que proativamente te avisa quando algo na sua estrutura pode estar te custando dinheiro?</div>
+      <div class="opcoes">
+        <div class="opcao" onclick="responder(5,0)"><div class="opcao-radio"></div><div class="opcao-txt">Não — quando descubro, já passou</div></div>
+        <div class="opcao" onclick="responder(5,1)"><div class="opcao-radio"></div><div class="opcao-txt">Tenho contador, mas ele só reporta — não propõe</div></div>
+        <div class="opcao" onclick="responder(5,2)"><div class="opcao-radio"></div><div class="opcao-txt">Às vezes alguém traz algo, mas não é sistemático</div></div>
+        <div class="opcao" onclick="responder(5,3)"><div class="opcao-radio"></div><div class="opcao-txt">Sim — tenho assessoria proativa com revisão periódica</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div class="tela" id="telaResultado">
+    <div id="resultadoConteudo"></div>
+  </div>
+
+</div>
+
+<div class="rodape">
+  <div class="rodape-txt">
+    <strong>Ivan Vianna · CFP® · Planejador financeiro · Arquiteto de patrimônio</strong><br>
+    CNPJ 56.099.913/0001-61 · ivanviannafinancas.com.br<br>
+    Este diagnóstico tem caráter educacional e não constitui recomendação de produto ou serviço específico.
+  </div>
+</div>
+
+<script>
+const WEBHOOK = 'https://script.google.com/macros/s/AKfycbzsVpO_OoWVjENJyDP2MCY-wGNqSnuz1oc6txaATRksQNRJCwrOaJaKlGzv2bQQI0I/exec';
+const LANDING = 'https://ivanlvianna.github.io/indicevidaeficienciafiscal/landing.html';
+
+let lead = {};
+let respostas = {};
+let telaAtual = 0;
+
+document.getElementById('cWpp').addEventListener('input', function(){
+  let v = this.value.replace(/\D/g,'');
+  if(v.length > 11) v = v.slice(0,11);
+  if(v.length > 7) v = '('+v.slice(0,2)+') '+v.slice(2,7)+'-'+v.slice(7);
+  else if(v.length > 2) v = '('+v.slice(0,2)+') '+v.slice(2);
+  else if(v.length > 0) v = '('+v;
+  this.value = v;
+});
+
+function iniciar(){
+  const nome = document.getElementById('cNome').value.trim();
+  const email = document.getElementById('cEmail').value.trim();
+  const wpp = document.getElementById('cWpp').value.replace(/\D/g,'');
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+  let ok = true;
+  const set = (id, erroId, cond) => {
+    document.getElementById(id).classList.toggle('erro', !cond);
+    document.getElementById(erroId).style.display = cond ? 'none' : 'block';
+    if(!cond) ok = false;
+  };
+  set('cNome','erroNome', nome.length >= 2);
+  set('cEmail','erroEmail', emailOk);
+  set('cWpp','erroWpp', wpp.length >= 10);
+  if(!ok) return;
+  lead = {nome, email, wpp};
+  const p = new URLSearchParams({sheet:'EficienciaFiscal', nome, email, wpp, produto:'Índice VIDA de Eficiência Fiscal', etapa:'entrada', timestamp:new Date().toISOString()});
+  new Image().src = WEBHOOK + '?' + p.toString();
+  irTela(1);
+}
+
+function irTela(n){
+  const idAtual = telaAtual === 0 ? 'tela0' : (telaAtual === 'R' ? 'telaResultado' : 'tela'+telaAtual);
+  document.getElementById(idAtual).classList.remove('ativa');
+  telaAtual = n;
+  const idNovo = n === 'R' ? 'telaResultado' : 'tela'+n;
+  document.getElementById(idNovo).classList.add('ativa');
+  window.scrollTo({top:0, behavior:'smooth'});
+  const pct = typeof n === 'number' && n >= 1 ? Math.round((n-1)/5*100) : (n==='R'?100:0);
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progTxt').textContent = n === 'R' ? 'Índice calculado' : (n >= 1 ? `Pergunta ${n} de 5` : '');
+}
+
+function responder(p, pts){
+  respostas[p] = pts;
+  const tela = document.getElementById('tela'+p);
+  tela.querySelectorAll('.opcao').forEach(o => o.classList.remove('selecionada'));
+  event.currentTarget.classList.add('selecionada');
+  setTimeout(() => { p < 5 ? irTela(p+1) : mostrarResultado(); }, 350);
+}
+
+function mostrarResultado(){
+  const total = Object.values(respostas).reduce((a,b)=>a+b,0);
+  const indice = Math.round(total/15*100);
+  const perda = 100 - indice;
+
+  // 3 dimensões
+  const visibilidade = Math.round(((respostas[1]||0) + (respostas[2]||0)) / 6 * 100);
+  const estrutura    = Math.round((respostas[3]||0) / 3 * 100);
+  const decisao      = Math.round(((respostas[4]||0) + (respostas[5]||0)) / 6 * 100);
+
+  const corDim = v => v < 40 ? 'alto' : v < 70 ? 'medio' : 'ok';
+
+  let frase, perdaFrase;
+  if(indice < 35){
+    frase = 'Sua estrutura patrimonial está deixando dinheiro escaping de forma sistemática — e silenciosa.';
+    perdaFrase = `A cada R$&nbsp;100 que você constrói, aproximadamente <strong>R$&nbsp;${perda} podem estar sendo consumidos por ineficiências fiscais, estruturais e decisórias</strong> que nunca aparecem em nenhum extrato.`;
+  } else if(indice < 65){
+    frase = 'Há elementos no lugar — mas existem lacunas que custam mais do que parecem.';
+    perdaFrase = `A cada R$&nbsp;100 que você constrói, <strong>R$&nbsp;${perda} ainda podem estar escapando por ineficiências que uma estrutura mais calibrada eliminaria</strong>.`;
+  } else {
+    frase = 'Sua estrutura está acima da média — mas quem chegou aqui sabe que os últimos pontos são os mais caros de deixar passar.';
+    perdaFrase = `Mesmo com índice elevado, <strong>os pontos remanescentes representam o custo mais alto por unidade de atenção</strong> — e são exatamente os que um diagnóstico técnico captura.`;
+  }
+
+  // Webhook resultado
+  const p2 = new URLSearchParams({sheet:'EficienciaFiscal', nome:lead.nome, email:lead.email, wpp:lead.wpp, produto:'Índice VIDA de Eficiência Fiscal', etapa:'resultado', indice, visibilidade, estrutura, decisao, timestamp:new Date().toISOString()});
+  new Image().src = WEBHOOK + '?' + p2.toString();
+
+  document.getElementById('resultadoConteudo').innerHTML = `
+    <div class="res-indice">
+      <div class="res-label">Índice VIDA de Eficiência Fiscal™</div>
+      <div class="res-numero" id="indiceNum">0<span class="res-de100">/100</span></div>
+      <div class="res-frase">${frase}</div>
+      <div class="res-perda">${perdaFrase}</div>
+    </div>
+
+    <div class="dims-wrap">
+      <div class="dims-titulo">Onde está o dinheiro que escapa</div>
+
+      <div class="dim-item">
+        <div class="dim-header">
+          <span class="dim-nome">Visibilidade fiscal</span>
+          <span class="dim-val">${visibilidade}/100</span>
+        </div>
+        <div class="dim-track"><div class="dim-fill ${corDim(visibilidade)}" data-val="${visibilidade}" style="width:0%"></div></div>
+      </div>
+
+      <div class="dim-item">
+        <div class="dim-header">
+          <span class="dim-nome">Estrutura jurídica e tributária</span>
+          <span class="dim-val">${estrutura}/100</span>
+        </div>
+        <div class="dim-track"><div class="dim-fill ${corDim(estrutura)}" data-val="${estrutura}" style="width:0%"></div></div>
+      </div>
+
+      <div class="dim-item">
+        <div class="dim-header">
+          <span class="dim-nome">Qualidade das decisões patrimoniais</span>
+          <span class="dim-val">${decisao}/100</span>
+        </div>
+        <div class="dim-track"><div class="dim-fill ${corDim(decisao)}" data-val="${decisao}" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="cta-box">
+      <div class="cta-kicker">Próximo passo</div>
+      <div class="cta-titulo">Diagnóstico Fiscal Estratégico — Método VIDA</div>
+      <div class="cta-frase">Transformamos seu índice em dinheiro.</div>
+      <div class="cta-itens">
+        <div class="cta-item">Quanto você está perdendo — em reais, não em percentual</div>
+        <div class="cta-item">Onde está perdendo — por dimensão e por decisão</div>
+        <div class="cta-item">Como recuperar — roadmap com prioridade por impacto</div>
+        <div class="cta-item">Impacto financeiro estimado nos próximos 10 anos</div>
+      </div>
+      <div class="cta-preco">R$ 997,00</div>
+      <a href="${LANDING}" class="btn-cta" target="_blank">Quero saber quanto estou perdendo →</a>
+    </div>
+  `;
+
+  irTela('R');
+
+  setTimeout(() => {
+    let cur = 0;
+    const el = document.getElementById('indiceNum');
+    const timer = setInterval(() => {
+      cur = Math.min(cur + 2, indice);
+      if(el) el.innerHTML = cur + '<span class="res-de100">/100</span>';
+      if(cur >= indice) clearInterval(timer);
+    }, 18);
+    document.querySelectorAll('.dim-fill').forEach(b => { b.style.width = b.dataset.val + '%'; });
+  }, 300);
+}
+</script>
+</body>
+</html>
